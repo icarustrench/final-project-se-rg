@@ -1,0 +1,62 @@
+READ AND WRITE menu with LIST
+READ AND WRITE basket with LIST
+
+READ AND WRITE chosenFood with RECORD
+
+READ AND WRITE boolSelect with BOOLEAN
+READ AND WRITE payCash with BOOLEAN
+READ AND WRITE selfPick with BOOLEAN
+READ AND WRITE paymentConfirmed with BOOLEAN
+
+READ AND WRITE total with NUMBER
+READ AND WRITE credit with NUMBER
+READ AND WRITE ongkosKirim with NUMBER
+
+STORE menu with "MENU_MAKANAN"
+STORE boolSelect with TRUE
+
+WHILE boolSelect DO
+    STORE chosenFood with "SELECTED" from menu
+    WHILE chosenFood.stock more or equal to menu["chosenFood.index"] DO
+        chosenFood.stock substract by 1
+    END WHILE
+    ADD chosenFood into basket
+    STORE boolSelect with TRUE or FALSE
+END WHILE
+
+STORE total with sum(FOR chosenFood.price in basket)
+
+STORE payCash with TRUE or FALSE
+STORE selfPick with TRUE or FALSE
+
+IF selfPick equals FALSE
+    STORE ongkosKirim with any number
+    STORE total add with calculated(ongkosKirim)
+
+IF payCash equals TRUE
+    CALL cashPayment(total)
+ELSE
+    CALL cashlessPayment(total)
+
+PROCEDURE cashPayment()
+    STORE paymentConfirmed with TRUE or FALSE
+END PROCEDURE
+
+PROCEDURE cashlessPayment(total)
+    STORE credit with get.user.credit
+    
+    WHILE credit less that total DO
+        READ AND WRITE amount with NUMBER
+        STORE amount with any number
+        STORE credit with topUp(credit, amount)
+    END WHILE
+
+    STORE credit substract by total
+    STORE paymentConfirmed with TRUE or FALSE
+END PROCEDURE 
+
+FUNCTION topUp(credit, amount)
+    STORE credit add by amount
+    return credit
+END FUNCTION
+
